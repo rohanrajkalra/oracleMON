@@ -101,13 +101,13 @@ class ventPrincFrame(wx.Frame):
         passwd = dlg.PassText.GetValue()
         sid = dlg.SidText.GetValue()
         if len(user) == 0:
-            print "Falta el usuario"
+            print "Falta usuario"
             dlg.Destroy()
         elif  len(passwd) == 0:
-            print "Falta el password"
+            print "Falta password"
             dlg.Close()
         elif len(sid) == 0:
-            print "Faltan el sid"
+            print "Faltan sid"
             dlg.Close()
         else:
             print "Vamos a conectar"
