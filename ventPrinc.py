@@ -34,17 +34,18 @@ class ventPrincFrame(wx.Frame):
     def _init_coll_toolBar1_Tools(self, parent):
         # generated method, don't edit
 
-        parent.DoAddTool(bitmap=wx.Bitmap(u'/home/vmalaga/Python_proyects/oracleMON/knetattach.png',
+        #parent.DoAddTool(bitmap=wx.Bitmap(u'/home/vmalaga/Python_proyects/oracleMON/knetattach.png',
+        parent.DoAddTool(bitmap=wx.Bitmap(u'img/knetattach.png',
               wx.BITMAP_TYPE_PNG), bmpDisabled=wx.NullBitmap,
               id=wxID_VENTPRINCFRAMETOOLBAR1CONECTAR_ID, kind=wx.ITEM_NORMAL,
               label=u'Conectar', longHelp=u'Conectar a oracle',
               shortHelp=u'Conectar')
-        parent.DoAddTool(bitmap=wx.Bitmap(u'/home/vmalaga/Python_proyects/oracleMON/kt-stop.png',
+        parent.DoAddTool(bitmap=wx.Bitmap(u'img/kt-stop.png',
               wx.BITMAP_TYPE_PNG), bmpDisabled=wx.NullBitmap,
               id=wxID_VENTPRINCFRAMETOOLBAR1DESCONECTAR_ID, kind=wx.ITEM_NORMAL,
               label=u'Desconectar', longHelp=u'Desconectar',
               shortHelp=u'Desconectar')
-        parent.DoAddTool(bitmap=wx.Bitmap(u'/home/vmalaga/Python_proyects/oracleMON/quassel_message.png',
+        parent.DoAddTool(bitmap=wx.Bitmap(u'img/quassel_message.png',
               wx.BITMAP_TYPE_PNG), bmpDisabled=wx.NullBitmap,
               id=wxID_VENTPRINCFRAMETOOLBAR1SALIR_ID, kind=wx.ITEM_NORMAL,
               label=u'Salir', longHelp=u'Salir', shortHelp=u'Salir')
