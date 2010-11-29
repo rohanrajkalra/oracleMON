@@ -1,0 +1,9 @@
+===============================================================================================
+				oracleMON 0.0.1
+===============================================================================================
+
+oracleMON pretende ser una herramienta libre para monitorizar algunas de las funciones de los
+servidores oracle.
+
+Esta hecho en python con wxpython y tiene una recopilacion de querys que he hido acumulando durante
+mis años como DBA 
