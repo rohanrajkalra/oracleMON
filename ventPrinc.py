@@ -25,7 +25,6 @@ class ventPrincFrame(wx.Frame):
         # generated method, don't edit
 
         parent.AddWindow(self.grid1, 0, border=0, flag=wx.ALIGN_TOP | wx.EXPAND)
-        parent.AddWindow(self.statusBar1, 0, border=0, flag=0)
 
     def _init_coll_toolBar1_Tools(self, parent):
         # generated method, don't edit
@@ -46,7 +45,7 @@ class ventPrincFrame(wx.Frame):
               shortHelp=u'Salir')
         parent.AddSeparator()
         parent.DoAddTool(bitmap=wx.Bitmap(u'img/nui.png', wx.BITMAP_TYPE_PNG),
-              bmpDisabled=wx.Bitmap(u'img/nuidis.png', wx.BITMAP_TYPE_PNG),
+              bmpDisabled=wx.NullBitmap,
               id=wxID_VENTPRINCFRAMETOOLBAR1NOT_USED_INDEX_ID,
               kind=wx.ITEM_NORMAL, label=u'Not used index',
               longHelp=u'Busca los indices no usados usando los datos de AWR',
@@ -95,15 +94,16 @@ class ventPrincFrame(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_VENTPRINCFRAME, name=u'ventPrincFrame',
-              parent=prnt, pos=wx.Point(416, 206), size=wx.Size(960, 533),
-              style=wx.DEFAULT_FRAME_STYLE, title=u'oracleMON')
+              parent=prnt, pos=wx.Point(311, 268), size=wx.Size(960, 533),
+              style=wx.SYSTEM_MENU | wx.CAPTION | wx.MINIMIZE | wx.CLOSE_BOX,
+              title=u'oracleMON')
         self.SetClientSize(wx.Size(960, 533))
         self.SetToolTipString(u'oracleMON')
         self.Center(wx.BOTH)
 
         self.toolBar1 = wx.ToolBar(id=wxID_VENTPRINCFRAMETOOLBAR1,
               name='toolBar1', parent=self, pos=wx.Point(0, 0),
-              size=wx.Size(368, 48), style=wx.TB_HORIZONTAL | wx.NO_BORDER)
+              size=wx.Size(370, 50), style=wx.TB_HORIZONTAL | wx.NO_BORDER)
         self.SetToolBar(self.toolBar1)
 
         self.statusBar1 = wx.StatusBar(id=wxID_VENTPRINCFRAMESTATUSBAR1,
@@ -152,13 +152,18 @@ class ventPrincFrame(wx.Frame):
             import cx_Oracle
             import sys
             (user,passwd,sid) = (str(dlg.UserText.GetValue()),str(dlg.PassText.GetValue()),str(dlg.SidText.GetValue()))
-            print "DATOS DE CONEXION: Usuario: "+ user +" Pass: "+ passwd + " SID: "+ sid
+            #print "DATOS DE CONEXION: Usuario: "+ user +" Pass: "+ passwd + " SID: "+ sid
             try:
-                connection = cx_Oracle.connect( user , passwd , sid )
-                print "Conectado a oracle"
+                if user == 'sys':
+                    connection = cx_Oracle.connect(user, passwd, sid, mode = cx_Oracle.SYSDBA)
+                    constring = user+"@"+sid+" as sysdba"
+                else:
+                    connection = cx_Oracle.connect( user , passwd , sid )
+                    constring = user+"@"+sid
+                #print "Conectado a oracle"
                 global conectado
                 conectado = "TRUE"
-                constring = user+"@"+sid
+                
                 self.statusBar1.SetStatusText("Conectado",0)
                 self.statusBar1.SetStatusText(constring,1)
                 self.staticBitmap1.SetBitmap(bitmap=wx.Bitmap(u'img/green.png'))
