@@ -1,15 +1,26 @@
+#-----------------------------------------------------------------------------
+# Name:        ventPrinc.py
+# Purpose:     
+#
+# Author:      <your name>
+#
+# Created:     2010/12/04
+# RCS-ID:      $Id: ventPrinc.py $
+# Copyright:   (c) 2006
+# Licence:     <your licence>
+#-----------------------------------------------------------------------------
 #Boa:Frame:ventPrincFrame
 
 import wx
 import wx.grid
 
+
 def create(parent):
     return ventPrincFrame(parent)
 
-[wxID_VENTPRINCFRAME, wxID_VENTPRINCFRAMEGRID1, 
- wxID_VENTPRINCFRAMESTATICBITMAP1, wxID_VENTPRINCFRAMESTATUSBAR1, 
- wxID_VENTPRINCFRAMETOOLBAR1, 
-] = [wx.NewId() for _init_ctrls in range(5)]
+[wxID_VENTPRINCFRAME, wxID_VENTPRINCFRAMERESULTS_GRID, 
+ wxID_VENTPRINCFRAMESTATUSBAR1, wxID_VENTPRINCFRAMETOOLBAR1, 
+] = [wx.NewId() for _init_ctrls in range(4)]
 
 [wxID_VENTPRINCFRAMETOOLBAR1CONECTAR_ID, 
  wxID_VENTPRINCFRAMETOOLBAR1DESCONECTAR_ID, 
@@ -24,7 +35,8 @@ class ventPrincFrame(wx.Frame):
     def _init_coll_boxSizer1_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.grid1, 0, border=0, flag=wx.ALIGN_TOP | wx.EXPAND)
+        parent.AddWindow(self.results_grid, 0, border=0,
+              flag=wx.ALIGN_TOP | wx.EXPAND)
 
     def _init_coll_toolBar1_Tools(self, parent):
         # generated method, don't edit
@@ -70,16 +82,16 @@ class ventPrincFrame(wx.Frame):
               id=wxID_VENTPRINCFRAMETOOLBAR1SALIR_ID)
         self.Bind(wx.EVT_TOOL, self.OnToolBar1Not_used_index_idTool,
               id=wxID_VENTPRINCFRAMETOOLBAR1NOT_USED_INDEX_ID)
-
+        
         parent.Realize()
-
+        
     def _init_coll_statusBar1_Fields(self, parent):
         # generated method, don't edit
         parent.SetFieldsCount(3)
 
         parent.SetStatusText(number=0, text=u'Desconectado')
         parent.SetStatusText(number=1, text=u'Destino')
-        parent.SetStatusText(number=2, text=u'')
+        parent.SetStatusText(number=2, text=u' O')
 
         parent.SetStatusWidths([-3, -1, 30])
 
@@ -94,7 +106,7 @@ class ventPrincFrame(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_VENTPRINCFRAME, name=u'ventPrincFrame',
-              parent=prnt, pos=wx.Point(311, 268), size=wx.Size(960, 533),
+              parent=prnt, pos=wx.Point(416, 206), size=wx.Size(960, 533),
               style=wx.SYSTEM_MENU | wx.CAPTION | wx.MINIMIZE | wx.CLOSE_BOX,
               title=u'oracleMON')
         self.SetClientSize(wx.Size(960, 533))
@@ -103,7 +115,7 @@ class ventPrincFrame(wx.Frame):
 
         self.toolBar1 = wx.ToolBar(id=wxID_VENTPRINCFRAMETOOLBAR1,
               name='toolBar1', parent=self, pos=wx.Point(0, 0),
-              size=wx.Size(370, 50), style=wx.TB_HORIZONTAL | wx.NO_BORDER)
+              size=wx.Size(368, 48), style=wx.TB_HORIZONTAL | wx.NO_BORDER)
         self.SetToolBar(self.toolBar1)
 
         self.statusBar1 = wx.StatusBar(id=wxID_VENTPRINCFRAMESTATUSBAR1,
@@ -116,13 +128,11 @@ class ventPrincFrame(wx.Frame):
         self._init_coll_statusBar1_Fields(self.statusBar1)
         self.SetStatusBar(self.statusBar1)
 
-        self.staticBitmap1 = wx.StaticBitmap(bitmap=wx.Bitmap(u'img/red.png',
-              wx.BITMAP_TYPE_PNG), id=wxID_VENTPRINCFRAMESTATICBITMAP1,
-              name='staticBitmap1', parent=self.statusBar1, pos=wx.Point(938,
-              5), size=wx.Size(24, 24), style=0)
-
-        self.grid1 = wx.grid.Grid(id=wxID_VENTPRINCFRAMEGRID1, name='grid1',
-              parent=self, pos=wx.Point(0, 0), size=wx.Size(960, 465), style=0)
+        self.results_grid = wx.grid.Grid(id=wxID_VENTPRINCFRAMERESULTS_GRID,
+              name=u'results_grid', parent=self, pos=wx.Point(0, 0),
+              size=wx.Size(960, 465), style=0)
+        self.results_grid.EnableEditing(False)
+        self.results_grid.Enable(False)
 
         self._init_coll_toolBar1_Tools(self.toolBar1)
 
@@ -130,27 +140,32 @@ class ventPrincFrame(wx.Frame):
 
     def __init__(self, parent):
         self._init_ctrls(parent)
+        global conectado
+        conectado = "FALSE"
+        
 
     def OnToolBar1Conectar_idTool(self, event):
         import conectar
+        
         dlg = conectar.ConDialogClass(self, -1, '')
         run = dlg.ShowModal()
         user = dlg.UserText.GetValue()
         passwd = dlg.PassText.GetValue()
         sid = dlg.SidText.GetValue()
         if len(user) == 0:
-            print "Falta usuario"
+            #print "Falta usuario"
             dlg.Destroy()
         elif  len(passwd) == 0:
-            print "Falta password"
+            #print "Falta password"
             dlg.Close()
         elif len(sid) == 0:
-            print "Faltan sid"
+            #print "Faltan sid"
             dlg.Close()
         else:
-            print "Vamos a conectar"
+            #print "Vamos a conectar"
             import cx_Oracle
             import sys
+            global connection
             (user,passwd,sid) = (str(dlg.UserText.GetValue()),str(dlg.PassText.GetValue()),str(dlg.SidText.GetValue()))
             #print "DATOS DE CONEXION: Usuario: "+ user +" Pass: "+ passwd + " SID: "+ sid
             try:
@@ -166,7 +181,7 @@ class ventPrincFrame(wx.Frame):
                 
                 self.statusBar1.SetStatusText("Conectado",0)
                 self.statusBar1.SetStatusText(constring,1)
-                self.staticBitmap1.SetBitmap(bitmap=wx.Bitmap(u'img/green.png'))
+                #self.staticBitmap1.SetBitmap(bitmap=wx.Bitmap(u'img/green.png'))
                 
             except cx_Oracle.DatabaseError, exc:
                 error, = exc.args
@@ -183,18 +198,34 @@ class ventPrincFrame(wx.Frame):
 	event.Skip()
 
     def OnToolBar1Desconectar_idTool(self, event):
+        cursor.close()
+        connection.close()
+        self.statusBar1.SetStatusText("Desconectado",0)
+        self.statusBar1.SetStatusText("************",1)
         event.Skip()
 
     def OnToolBar1Salir_idTool(self, event):
         self.Close()
         event.Skip()
 
-    def OnNotUsedindexBotonButton(self, event):
-        if ( conectado == "TRUE"):
-            print "Estoy Conectado"
-        else:
-            print "No estoy conectado"
-        event.Skip()
-
     def OnToolBar1Not_used_index_idTool(self, event):
+        if ( conectado == "TRUE"):
+            #print "Estoy Conectado"
+            cursor = connection.cursor()
+            cursor.execute("""SELECT n.OWNER ||'.'|| n.TABLE_NAME as TABLA, n.OWNER||'.'||n.INDEX_NAME as INDICE, d.NUM_ROWS AS TOTAL FROM DBA_TABLES d INNER JOIN NOT_USED_INDEX_MV n ON d.TABLE_NAME = n.TABLE_NAME AND d.OWNER = n.OWNER WHERE (d.NUM_ROWS >0) AND n.INDEX_NAME in (select INDEX_NAME from DBA_INDEXES) AND n.OWNER not in ('CTXSYS','EYPS_COUNTRY') AND n.INDEX_NAME not like 'DR$%' AND n.TABLE_NAME in (select TABLA from table_usage_mv where ACCESOS >= 1) AND n.INDEX_NAME in (select index_name from index_creation_date_mv where to_date(fecha) <= SYSDATE -35) ORDER BY TOTAL desc,n.owner, n.TABLE_NAME""")
+            resultado = cursor.fetchall()
+            num_rows = cursor.rowcount
+            #print "Numero de lineas: ",num_rows
+            self.results_grid.Enable(True)
+            self.results_grid.CreateGrid(num_rows,3)
+            self.results_grid.SetColLabelValue(0,'TABLA')
+            self.results_grid.SetColLabelValue(1,'INDICE')
+            self.results_grid.SetColLabelValue(2,'Numero de filas')
+            cursor.close()
+        else:
+            dlg = wx.MessageDialog(self, 'No estas conectado a Oracle', 'ATENCION', wx.OK | wx.ICON_INFORMATION)
+            try:
+                result = dlg.ShowModal()
+            finally:
+                dlg.Destroy()
         event.Skip()
