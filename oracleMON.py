@@ -6,6 +6,7 @@ import wx
 import ventPrinc
 
 modules ={u'conectar': [0, '', u'conectar.py'],
+ u'conectar2': [0, '', u'conectar2.py'],
  u'ventPrinc': [1, 'Main frame of Application', u'ventPrinc.py']}
 
 class BoaApp(wx.App):

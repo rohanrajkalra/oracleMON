@@ -82,9 +82,9 @@ class ventPrincFrame(wx.Frame):
               id=wxID_VENTPRINCFRAMETOOLBAR1SALIR_ID)
         self.Bind(wx.EVT_TOOL, self.OnToolBar1Not_used_index_idTool,
               id=wxID_VENTPRINCFRAMETOOLBAR1NOT_USED_INDEX_ID)
-        
+
         parent.Realize()
-        
+
     def _init_coll_statusBar1_Fields(self, parent):
         # generated method, don't edit
         parent.SetFieldsCount(3)
@@ -133,6 +133,7 @@ class ventPrincFrame(wx.Frame):
               size=wx.Size(960, 465), style=0)
         self.results_grid.EnableEditing(False)
         self.results_grid.Enable(False)
+        self.results_grid.Show(False)
 
         self._init_coll_toolBar1_Tools(self.toolBar1)
 
@@ -216,11 +217,25 @@ class ventPrincFrame(wx.Frame):
             resultado = cursor.fetchall()
             num_rows = cursor.rowcount
             #print "Numero de lineas: ",num_rows
+            self.results_grid.Show(True)
             self.results_grid.Enable(True)
+            
             self.results_grid.CreateGrid(num_rows,3)
             self.results_grid.SetColLabelValue(0,'TABLA')
             self.results_grid.SetColLabelValue(1,'INDICE')
             self.results_grid.SetColLabelValue(2,'Numero de filas')
+            
+            fila = 0
+            for row in resultado:
+                print fila,"TABLA:",row[0], " INDEX:",row[1], "\n"
+                total = str(row[2])
+                self.results_grid.SetCellValue(fila,0,row[0])
+                self.results_grid.SetCellValue(fila,1,row[1])
+                self.results_grid.SetCellValue(fila,2,total)
+                fila = fila+1
+            
+            self.results_grid.AutoSizeColumns(True)
+            self.results_grid.ForceRefresh()    
             cursor.close()
         else:
             dlg = wx.MessageDialog(self, 'No estas conectado a Oracle', 'ATENCION', wx.OK | wx.ICON_INFORMATION)
