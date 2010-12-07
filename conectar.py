@@ -1,5 +1,5 @@
 #Boa:Dialog:ConectarDialog
-# -*- coding: utf-8 -*-
+
 import wx
 
 # begin wxGlade: extracode
@@ -25,7 +25,7 @@ class ConDialogClass(wx.Dialog):
     self.Bind(wx.EVT_BUTTON, self.salir_evt, self.CancelarBoton)
       
   def __set_properties(self):
-    self.SetTitle(u"Conexión a oracle")
+    self.SetTitle(u"Conexion a oracle")
     self.SetSize((350, 250))
     self.UserText.SetFocus()
         
@@ -52,5 +52,5 @@ class ConDialogClass(wx.Dialog):
     self.Close()
     event.Skip
 
-  def salir_evt(self, event): # wxGlade: ConDialogClass.<event_handler>
+  def salir_evt(self, event):
     self.Destroy()
